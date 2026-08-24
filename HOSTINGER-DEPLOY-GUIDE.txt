@@ -1,0 +1,400 @@
+================================================================
+ CROWN STORE PK — COMPLETE HOSTINGER DEPLOYMENT GUIDE
+ (Frontend + Backend — First Time Deployment)
+================================================================
+
+IMPORTANT NOTE BEFORE YOU START
+--------------------------------
+This site is built with Next.js. Next.js is a FULL-STACK framework —
+your frontend (the pages customers see: home, shop, product pages)
+and your backend (the API routes: /api/products, /api/orders,
+/api/admin/*, login, database logic) all live in ONE codebase and
+run as ONE single Node.js process.
+
+This means there is NOT a separate "deploy the frontend" step and
+a separate "deploy the backend" step like you might do with a
+React + Express project. You deploy the whole app ONCE, and it
+serves both the website pages AND the API at the same time, on the
+same domain. This guide covers that single, complete deployment.
+
+
+WHY A VPS IS THE SAFER CHOICE (shared hosting can work too, with a caveat)
+-----------------------------------------
+The database engine now uses Node.js's own built-in node:sqlite module
+instead of the native better-sqlite3 module, so server-side compilation
+is no longer required — npm install will succeed on shared hosting too.
+
+The remaining reason to prefer a VPS: product image uploads and the
+SQLite database file are both saved directly onto the server's disk
+(in public/images/products/ and data/crown-store.db). On a VPS this
+disk is always persistent. On shared/managed Node.js hosting there is
+no official guarantee these files survive every redeploy or restart —
+test this before trusting it with real orders (upload a test product
+image, trigger a redeploy, confirm it's still there).
+
+If reliability matters most: buy a Hostinger VPS plan (KVM 1 or KVM 2
+is enough for this site), Ubuntu 22.04 as the operating system.
+
+
+WHAT YOU NEED BEFORE STARTING
+-------------------------------
+[ ] A Hostinger VPS plan purchased, Ubuntu 22.04 selected
+[ ] A domain name (bought from Hostinger or anywhere else)
+[ ] Your VPS IP address and root password
+      (Find these in: hPanel -> VPS -> Overview)
+[ ] This project folder on your own PC (crown-store-pk)
+[ ] (Optional but recommended) A free GitHub account, github.com
+
+
+================================================================
+ PHASE 1 — PUT YOUR CODE ON GITHUB (RECOMMENDED)
+================================================================
+
+Doing this makes every future update as easy as one command. Skip
+to Phase 1B if you'd rather upload files directly instead.
+
+On your own PC, open a terminal inside the crown-store-pk folder
+and run:
+
+    git init
+    git add .
+    git commit -m "Initial commit before going live"
+
+Now go to github.com/new in your browser and create a new PRIVATE
+repository (name it anything, e.g. crown-store-pk). Do NOT check
+"add a README" — leave it empty. After creating it, GitHub will
+show you commands like these — copy the ones IT shows you (they
+include your exact username) and run them:
+
+    git remote add origin https://github.com/YOUR-USERNAME/crown-store-pk.git
+    git branch -M main
+    git push -u origin main
+
+If it asks you to log in, follow GitHub's on-screen instructions
+(it will likely open a browser window to authenticate).
+
+--- PHASE 1B — Skip GitHub (direct upload instead) ---
+If you don't want to use GitHub, skip ahead. You'll upload the
+project directly to the server in Phase 4, Option B instead.
+
+
+================================================================
+ PHASE 2 — CONNECT TO YOUR VPS
+================================================================
+
+Open a terminal on your PC (Git Bash, Windows Terminal, or
+PowerShell all work) and run, replacing YOUR_VPS_IP with your
+actual VPS IP address from hPanel:
+
+    ssh root@YOUR_VPS_IP
+
+The first time, it will ask "are you sure you want to continue
+connecting?" — type "yes" and press Enter.
+
+Then it asks for a password — type your VPS root password (from
+hPanel). Nothing will appear on screen while you type, that is
+normal, just type it and press Enter.
+
+You are now INSIDE your VPS. Every command from Phase 3 onward
+(unless marked "on your own PC") runs inside this SSH session.
+
+
+================================================================
+ PHASE 3 — INSTALL REQUIRED SOFTWARE ON THE VPS
+================================================================
+
+Run these one at a time, waiting for each to finish:
+
+    apt update && apt upgrade -y
+
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+    apt install -y nodejs
+
+    node -v
+    npm -v
+
+(You should see v22.13.0 or newer for node — this is required for the
+built-in node:sqlite database module. If you don't, stop and tell me
+the error.)
+
+    apt install -y git
+
+    npm install -g pm2
+
+    apt install -y nginx
+
+What each of these does:
+  - nodejs      : runs your Next.js app
+  - git         : to pull your code from GitHub
+  - pm2         : keeps your app running 24/7, auto-restarts it if
+                   it crashes or the server reboots
+  - nginx       : receives visitor traffic on your domain and
+                   forwards it to your Next.js app
+
+
+================================================================
+ PHASE 4 — GET YOUR CODE ONTO THE VPS
+================================================================
+
+--- Option A: From GitHub (if you did Phase 1) ---
+
+Still inside the VPS (SSH session):
+
+    cd /var/www
+    git clone https://github.com/YOUR-USERNAME/crown-store-pk.git
+    cd crown-store-pk
+
+--- Option B: Direct upload (if you skipped GitHub) ---
+
+Open a NEW terminal window on your OWN PC (do not close the SSH
+one). Go into your project folder, then run (replace YOUR_VPS_IP):
+
+    scp -r . root@YOUR_VPS_IP:/var/www/crown-store-pk
+
+Tip: delete the node_modules folder on your PC before running this
+— it will be reinstalled fresh on the server in Phase 6 and this
+skips uploading thousands of unnecessary files.
+
+
+================================================================
+ PHASE 5 — BRING YOUR REAL DATA OVER (OPTIONAL)
+================================================================
+
+If you already customized products, settings, or orders on your
+local/dev copy and want that SAME data live on the real site, copy
+your database file over. On your OWN PC (not the VPS):
+
+    scp "C:\Users\NINJA\Desktop\crown-store-pk\data\crown-store.db" root@YOUR_VPS_IP:/var/www/crown-store-pk/data/
+
+If you skip this step, that's fine — the app will automatically
+create a fresh database with the 4 demo products and a working
+admin account the first time it runs, which you can then edit from
+the admin panel.
+
+
+================================================================
+ PHASE 6 — INSTALL DEPENDENCIES AND BUILD THE APP
+================================================================
+
+Back in your VPS SSH session:
+
+    cd /var/www/crown-store-pk
+    npm install
+
+Now build the production version of the app (this compiles both
+the frontend pages and the backend API routes together):
+
+    npm run build
+
+Wait for it to finish — it should end with a summary of your
+routes/pages and no red error text.
+
+
+================================================================
+ PHASE 7 — SECURITY: SET A REAL LOGIN SECRET
+================================================================
+
+Right now the app falls back to a default hardcoded secret used to
+sign login sessions. Before going live, set your own:
+
+    nano /var/www/crown-store-pk/.env
+
+Type this line into the empty file (make up your own long random
+string instead of the placeholder — 40+ random characters, letters
+and numbers, never share it with anyone):
+
+    JWT_SECRET=put-a-long-random-string-here-never-share-it
+
+Save and exit nano: press Ctrl+X, then Y, then Enter.
+
+
+================================================================
+ PHASE 8 — START THE APP WITH PM2
+================================================================
+
+    cd /var/www/crown-store-pk
+    pm2 start npm --name "crown-store" -- start
+    pm2 save
+    pm2 startup
+
+The last command, "pm2 startup," will print out ANOTHER command on
+screen — copy that exact line it shows you and run it too (this
+makes the app auto-start if the VPS ever reboots).
+
+Check it's running:
+
+    pm2 status
+
+You should see "crown-store" with status "online".
+
+
+================================================================
+ PHASE 9 — CONFIGURE NGINX (CONNECT YOUR DOMAIN TO THE APP)
+================================================================
+
+    nano /etc/nginx/sites-available/crown-store
+
+Paste this entire block in (replace yourdomain.com with your real
+domain, in BOTH places it appears):
+
+    server {
+        listen 80;
+        server_name yourdomain.com www.yourdomain.com;
+
+        location / {
+            proxy_pass http://localhost:3000;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_cache_bypass $http_upgrade;
+        }
+    }
+
+Save and exit: Ctrl+X, then Y, then Enter.
+
+Activate this configuration:
+
+    ln -s /etc/nginx/sites-available/crown-store /etc/nginx/sites-enabled/
+    nginx -t
+    systemctl restart nginx
+
+"nginx -t" should say "syntax is ok" and "test is successful". If
+it shows an error, stop and send me the exact message.
+
+
+================================================================
+ PHASE 10 — POINT YOUR DOMAIN AT THE VPS
+================================================================
+
+Go to Hostinger hPanel -> Domains -> select your domain ->
+DNS / Name Servers -> DNS Zone Editor.
+
+Add or edit these two records:
+
+    Type    Name    Points to (Value)    TTL
+    A       @       YOUR_VPS_IP          14400
+    A       www     YOUR_VPS_IP          14400
+
+DNS changes can take anywhere from 15 minutes to 24 hours to take
+effect everywhere. You can check progress at dnschecker.org.
+
+Once it's propagated, http://yourdomain.com should load your site
+(without the padlock/https yet — that's the next phase).
+
+
+================================================================
+ PHASE 11 — ADD FREE SSL (HTTPS PADLOCK)
+================================================================
+
+Wait until Phase 10's DNS has propagated, then in your VPS SSH
+session:
+
+    apt install -y certbot python3-certbot-nginx
+    certbot --nginx -d yourdomain.com -d www.yourdomain.com
+
+It will ask for an email address (for renewal reminders) and ask
+you to agree to terms — say yes to both. Certbot automatically
+updates your Nginx config and will silently renew the certificate
+every ~90 days on its own — you don't need to do anything more.
+
+Now https://yourdomain.com should load with a padlock icon.
+
+
+================================================================
+ PHASE 12 — GO-LIVE CHECKLIST (DO ALL OF THESE)
+================================================================
+
+[ ] Visit https://yourdomain.com/login and log in with
+    admin@crownstore.pk / admin123 to confirm the admin panel
+    works on the live site.
+
+[ ] Go to Admin -> Settings -> "Change Admin Password" and set a
+    real password immediately. Never leave the default admin123
+    password on a live site.
+
+[ ] Go to Admin -> Settings and enter your REAL SMTP email details
+    so order-notification emails actually get sent to you.
+
+[ ] Set your real COD charges / announcement bar text in
+    Admin -> Settings, if you want them different from what you
+    tested with.
+
+[ ] Place one real test order yourself all the way through
+    (add to cart -> checkout -> confirmation) to confirm the full
+    flow works on the live server.
+
+[ ] Go to Admin -> Orders and click Delete on that test order's row
+    so your real orders list stays clean.
+
+[ ] Make sure JWT_SECRET in your .env file (Phase 7) is a real
+    random string, not the placeholder value.
+
+
+================================================================
+ HOW TO PUSH FUTURE UPDATES
+================================================================
+
+Whenever a new change is made to the project on your PC:
+
+--- If you used GitHub (Phase 1) ---
+
+On your PC:
+    git add .
+    git commit -m "describe what changed"
+    git push
+
+On the VPS:
+    cd /var/www/crown-store-pk
+    git pull
+    npm install
+    npm run build
+    pm2 restart crown-store
+
+--- If you used direct upload (Phase 1B) ---
+
+Repeat the same "scp -r ." command from Phase 4 Option B, then on
+the VPS run:
+    npm install
+    npm run build
+    pm2 restart crown-store
+
+
+================================================================
+ BACKUPS (DO THIS WEEKLY)
+================================================================
+
+Your real data (orders, products, customer accounts) lives in ONE
+file on the VPS: data/crown-store.db. It is NOT on GitHub and NOT
+backed up automatically. Copy it to your own PC regularly:
+
+On your PC:
+    scp root@YOUR_VPS_IP:/var/www/crown-store-pk/data/crown-store.db ./backup-crown-store-DATE.db
+
+(Replace DATE with today's date, e.g. backup-crown-store-2026-08-23.db)
+
+Also periodically back up public/images/products/ the same way if
+you've uploaded a lot of product photos through the admin panel.
+
+
+================================================================
+ TROUBLESHOOTING / USEFUL COMMANDS
+================================================================
+
+  pm2 logs crown-store        -> see live app errors/output
+  pm2 restart crown-store     -> restart the app
+  pm2 status                  -> check if it's running
+  systemctl status nginx      -> check if Nginx is healthy
+  nginx -t                    -> check Nginx config for typos
+  certbot renew --dry-run     -> test that SSL auto-renewal works
+
+If you get stuck anywhere, copy the EXACT error message you see
+and send it to me — don't guess or skip ahead, deployment errors
+are usually one specific fixable thing.
+
+================================================================
+ END OF GUIDE
+================================================================
