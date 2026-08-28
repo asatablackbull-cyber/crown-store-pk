@@ -44,7 +44,7 @@ export default function AboutPage() {
             <h2 className="section-title">Premium Craftsmanship</h2>
             <div className="section-divider" />
           </div>
-          <div className="features-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+          <div className="features-grid features-grid-3">
             <Reveal as="div" className="feature-card">
               <div className="feature-icon"><IconGear /></div>
               <h3 className="feature-title">316L Stainless Steel</h3>

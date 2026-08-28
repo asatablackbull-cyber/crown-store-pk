@@ -171,7 +171,7 @@ export default function HomePage() {
             <h2 className="section-title">What Sets Us Apart</h2>
             <div className="section-divider" />
           </Reveal>
-          <div className="features-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+          <div className="features-grid features-grid-3">
             <Reveal as="div" className="feature-card" style={{ borderColor: 'var(--color-border-gold)' }}>
               <div className="feature-icon"><IconGear /></div>
               <h3 className="feature-title">316L Stainless Steel</h3>

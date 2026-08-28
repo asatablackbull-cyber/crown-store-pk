@@ -1,9 +1,25 @@
+import { Fraunces, Public_Sans } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from './components/CartContext';
 import Navbar from './components/Navbar';
 import CartDrawer from './components/CartDrawer';
 import Footer from './components/Footer';
 import { IconMessageCircle } from './components/Icons';
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  axes: ['opsz'],
+  variable: '--font-fraunces',
+  display: 'swap',
+});
+
+const publicSans = Public_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-public-sans',
+  display: 'swap',
+});
 
 export const metadata = {
   title: 'Crown Store PK — Luxury Waterproof Jewelry',
@@ -18,7 +34,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${fraunces.variable} ${publicSans.variable}`}>
       <body>
         <CartProvider>
           <Navbar />
