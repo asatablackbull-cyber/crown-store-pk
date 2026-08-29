@@ -534,7 +534,7 @@ img {
   gap: 0.3rem;
   font-size: 0.75rem;
   color: var(--color-text-muted);
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.45rem;
 }
 
 .product-card-rating svg {
@@ -543,7 +543,7 @@ img {
 }
 
 .product-card-info {
-  padding: 1.25rem;
+  padding: 1rem;
 }
 
 .product-card-category {
@@ -556,11 +556,15 @@ img {
 
 .product-card-name {
   font-family: var(--font-heading);
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--color-white);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.4rem;
   line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .product-card-price {
