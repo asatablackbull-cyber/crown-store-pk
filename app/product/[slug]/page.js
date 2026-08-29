@@ -1,7 +1,11 @@
-import { getProductBySlug } from '@/lib/products';
+import { getProductBySlug, getProducts } from '@/lib/products';
 import ProductDetailContent from './ProductDetailContent';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 30;
+
+export async function generateStaticParams() {
+  return getProducts().map(product => ({ slug: product.slug }));
+}
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;

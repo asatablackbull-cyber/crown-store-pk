@@ -4,7 +4,7 @@ import Reveal from './components/Reveal';
 import { IconDroplet, IconShield, IconPackage, IconSparkles, IconGear, IconGem, IconStar, IconCheck } from './components/Icons';
 import { getProducts } from '@/lib/products';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 30;
 
 const testimonials = [
   {

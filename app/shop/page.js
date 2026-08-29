@@ -2,7 +2,7 @@ import { getProducts } from '@/lib/products';
 import { getCategories } from '@/lib/categories';
 import ShopContent from './ShopContent';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 30;
 
 export default async function ShopPage({ searchParams }) {
   const { category } = await searchParams;
