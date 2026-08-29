@@ -3,23 +3,23 @@
   --color-bg-secondary: #111111;
   --color-bg-card: #141414;
   --color-bg-elevated: #1a1a1a;
-  --color-gold: #c9a84c;
-  --color-gold-light: #e0c97f;
-  --color-gold-dark: #a68a3a;
+  --color-gold: #e8e6e0;
+  --color-gold-light: #ffffff;
+  --color-gold-dark: #b6b3aa;
   --color-silver: #c0c0c0;
   --color-white: #f5f5f5;
   --color-text: #e8e8e8;
   --color-text-muted: #888888;
   --color-text-dim: #555555;
   --color-border: #2a2a2a;
-  --color-border-gold: rgba(201, 168, 76, 0.3);
+  --color-border-gold: rgba(232, 230, 224, 0.25);
   --color-success: #4ade80;
   --color-error: #ef4444;
   --color-warning: #f59e0b;
   --font-heading: var(--font-fraunces), Georgia, serif;
   --font-body: var(--font-public-sans), -apple-system, sans-serif;
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --shadow-gold: 0 0 30px rgba(201, 168, 76, 0.1);
+  --shadow-gold: 0 0 30px rgba(232, 230, 224, 0.08);
   --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
   --glass-bg: rgba(20, 20, 20, 0.8);
   --glass-border: rgba(255, 255, 255, 0.06);
@@ -285,7 +285,7 @@ img {
   letter-spacing: 0.25em;
   text-transform: uppercase;
   margin-bottom: 1.5rem;
-  background: rgba(201, 168, 76, 0.05);
+  background: rgba(232, 230, 224, 0.05);
 }
 
 .hero h1 {
@@ -337,7 +337,7 @@ img {
 
 .btn-primary:hover {
   background: var(--color-gold-light);
-  box-shadow: 0 0 30px rgba(201, 168, 76, 0.3);
+  box-shadow: 0 0 30px rgba(232, 230, 224, 0.3);
   transform: translateY(-2px);
 }
 
@@ -657,7 +657,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(201, 168, 76, 0.1);
+  background: rgba(232, 230, 224, 0.1);
   border: 1px solid var(--color-border-gold);
   color: var(--color-gold);
   font-family: var(--font-heading);
@@ -840,7 +840,7 @@ img {
 .footer-social a:hover {
   border-color: var(--color-gold);
   color: var(--color-gold);
-  background: rgba(201, 168, 76, 0.1);
+  background: rgba(232, 230, 224, 0.1);
 }
 
 /* =================== CART DRAWER =================== */
@@ -1102,7 +1102,7 @@ img {
 .form-textarea:focus,
 .form-select:focus {
   border-color: var(--color-gold);
-  box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.15);
+  box-shadow: 0 0 0 2px rgba(232, 230, 224, 0.15);
 }
 
 .form-textarea {
@@ -1305,7 +1305,7 @@ img {
 .size-btn.active {
   border-color: var(--color-gold);
   color: var(--color-gold);
-  background: rgba(201, 168, 76, 0.08);
+  background: rgba(232, 230, 224, 0.08);
 }
 
 .product-features {
@@ -1412,7 +1412,7 @@ img {
 .payment-method-option.active {
   border-color: var(--color-gold);
   color: var(--color-white);
-  background: rgba(201, 168, 76, 0.06);
+  background: rgba(232, 230, 224, 0.06);
 }
 
 .coupon-box {
@@ -1454,7 +1454,7 @@ img {
   align-items: center;
   gap: 0.5rem;
   padding: 1rem;
-  background: rgba(201, 168, 76, 0.08);
+  background: rgba(232, 230, 224, 0.08);
   border: 1px solid var(--color-border-gold);
   margin-top: 1.5rem;
   font-size: 0.85rem;
@@ -1489,7 +1489,7 @@ img {
 .admin-sidebar a:hover,
 .admin-sidebar a.active {
   color: var(--color-gold);
-  background: rgba(201, 168, 76, 0.05);
+  background: rgba(232, 230, 224, 0.05);
   border-left-color: var(--color-gold);
 }
 
@@ -1575,7 +1575,7 @@ img {
 }
 
 .data-table tr:hover td {
-  background: rgba(201, 168, 76, 0.02);
+  background: rgba(232, 230, 224, 0.02);
 }
 
 .status-badge {
