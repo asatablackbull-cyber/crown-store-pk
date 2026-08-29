@@ -10,7 +10,9 @@ export default function ProductDetailContent({ product }) {
   const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || '');
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(0);
   const { addToCart } = useCart();
+  const images = product.images?.length ? product.images : ['/images/products/logo.jpg'];
 
   const handleAddToCart = () => {
     addToCart(product, selectedSize, quantity);
@@ -30,8 +32,23 @@ export default function ProductDetailContent({ product }) {
     <div className="product-detail">
       <div className="product-gallery">
         <div className="product-main-image">
-          <img src={product.images?.[0] || '/images/products/logo.jpg'} alt={product.name} />
+          <img src={images[selectedImage] || images[0]} alt={product.name} />
         </div>
+        {images.length > 1 && (
+          <div className="product-thumbnails">
+            {images.map((img, i) => (
+              <button
+                key={img}
+                type="button"
+                className={`product-thumbnail ${i === selectedImage ? 'active' : ''}`}
+                onClick={() => setSelectedImage(i)}
+                aria-label={`View image ${i + 1} of ${product.name}`}
+              >
+                <img src={img} alt="" />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="product-info">
