@@ -136,7 +136,7 @@ export default function CheckoutPage() {
           {error && <div className="error-message">{error}</div>}
 
           <form onSubmit={handleSubmit}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div className="form-grid-2">
               <div className="form-group">
                 <label className="form-label">Full Name *</label>
                 <input className="form-input" name="customerName" placeholder="Your full name" value={form.customerName} onChange={handleChange} required />

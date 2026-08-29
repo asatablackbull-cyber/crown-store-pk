@@ -20,7 +20,7 @@ export default function CartPage() {
             <Link href="/shop" className="btn btn-primary">Browse Collection</Link>
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '3rem' }}>
+          <div className="cart-layout">
             <div>
               {items.map(item => (
                 <div key={item.key} style={{ display: 'flex', gap: '1.5rem', padding: '1.5rem 0', borderBottom: '1px solid var(--color-border)' }}>

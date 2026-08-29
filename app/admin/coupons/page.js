@@ -149,7 +149,7 @@ export default function AdminCouponsPage() {
                   <label className="form-label">Coupon Code *</label>
                   <input className="form-input" style={{ textTransform: 'uppercase' }} value={form.code} onChange={e => setForm({ ...form, code: e.target.value })} placeholder="e.g. CROWN20" required />
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className="form-grid-2">
                   <div className="form-group">
                     <label className="form-label">Discount Type</label>
                     <select className="form-select" value={form.discountType} onChange={e => setForm({ ...form, discountType: e.target.value })}>
@@ -162,7 +162,7 @@ export default function AdminCouponsPage() {
                     <input className="form-input" type="number" min="0" value={form.discountValue} onChange={e => setForm({ ...form, discountValue: e.target.value })} required />
                   </div>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className="form-grid-2">
                   <div className="form-group">
                     <label className="form-label">Min. Order Amount</label>
                     <input className="form-input" type="number" min="0" value={form.minOrderAmount} onChange={e => setForm({ ...form, minOrderAmount: e.target.value })} placeholder="0" />

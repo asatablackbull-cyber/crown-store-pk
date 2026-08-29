@@ -39,7 +39,7 @@ export default function ContactPage() {
         <p>Have questions? We are here to help.</p>
       </div>
       <div className="page-content" style={{ maxWidth: '800px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', marginBottom: '3rem' }}>
+        <div className="form-grid-2" style={{ gap: '3rem', marginBottom: '3rem' }}>
           <div className="feature-card" style={{ textAlign: 'left' }}>
             <div className="feature-icon"><IconMessageCircle /></div>
             <h3 className="feature-title">WhatsApp</h3>
@@ -59,7 +59,7 @@ export default function ContactPage() {
 
         <h2 style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-white)', marginBottom: '1.5rem' }}>Send Us a Message</h2>
         <form onSubmit={handleSubmit}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div className="form-grid-2">
             <div className="form-group">
               <label className="form-label">Name *</label>
               <input className="form-input" value={form.name} onChange={e => setForm({...form, name: e.target.value})} required />
@@ -69,7 +69,7 @@ export default function ContactPage() {
               <input className="form-input" type="email" value={form.email} onChange={e => setForm({...form, email: e.target.value})} required />
             </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div className="form-grid-2">
             <div className="form-group">
               <label className="form-label">Phone</label>
               <input className="form-input" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} />

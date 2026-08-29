@@ -164,7 +164,7 @@ export default function AdminSettingsPage() {
                 required
               />
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div className="form-grid-2">
               <div className="form-group">
                 <label className="form-label">New Password</label>
                 <input
@@ -229,7 +229,7 @@ export default function AdminSettingsPage() {
               For Gmail: host smtp.gmail.com, port 587, and use a 16-character{' '}
               <a href="https://myaccount.google.com/apppasswords" target="_blank" rel="noopener" style={{ color: 'var(--color-gold)' }}>App Password</a>, not your normal password.
             </p>
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1rem' }}>
+            <div className="form-grid-2-1">
               <div className="form-group">
                 <label className="form-label">SMTP Host</label>
                 <input className="form-input" value={form.smtpHost} onChange={e => set('smtpHost', e.target.value)} placeholder="smtp.gmail.com" />

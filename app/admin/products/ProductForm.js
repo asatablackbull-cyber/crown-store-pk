@@ -193,7 +193,7 @@ export default function ProductForm({ mode, product }) {
                   <label className="form-label">Title *</label>
                   <input className="form-input" value={form.name} onChange={e => set('name', e.target.value)} placeholder="Your product title" required />
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className="form-grid-2">
                   <div className="form-group">
                     <label className="form-label">Subtitle</label>
                     <input className="form-input" value={form.shortDescription} onChange={e => set('shortDescription', e.target.value)} placeholder="Your product subtitle" />
@@ -244,7 +244,7 @@ export default function ProductForm({ mode, product }) {
 
               <section className="stat-card">
                 <h3 className="product-form-section-title">Options</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className="form-grid-2">
                   <div className="form-group">
                     <label className="form-label">Material</label>
                     <input className="form-input" value={form.material} onChange={e => set('material', e.target.value)} />
@@ -272,7 +272,7 @@ export default function ProductForm({ mode, product }) {
                   <label className="form-label">Compare / Discount Price</label>
                   <input className="form-input" type="number" value={form.comparePrice} onChange={e => set('comparePrice', e.target.value)} />
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className="form-grid-2">
                   <div className="form-group">
                     <label className="form-label">SKU</label>
                     <input className="form-input" value={form.sku} onChange={e => set('sku', e.target.value)} />
