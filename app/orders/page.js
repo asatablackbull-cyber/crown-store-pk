@@ -80,7 +80,7 @@ export default function OrdersPage() {
                 Recipient: <strong>{searchedOrder.customerName}</strong> ({searchedOrder.city})
               </p>
               <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
-                Total: <strong>Rs. {searchedOrder.total?.toLocaleString()}</strong> (Cash on Delivery)
+                Total: <strong>Rs. {searchedOrder.total?.toLocaleString()}</strong> ({searchedOrder.paymentMethod})
               </p>
               <p style={{ fontSize: '0.85rem', color: 'var(--color-text-dim)' }}>
                 Date: {new Date(searchedOrder.createdAt).toLocaleDateString()}

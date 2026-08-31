@@ -63,30 +63,70 @@ export default function AdminOrdersPage() {
         ) : orders.length === 0 ? (
           <p style={{ color: 'var(--color-text-dim)' }}>No orders placed yet.</p>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Order #</th>
-                  <th>Customer</th>
-                  <th>Phone</th>
-                  <th>City</th>
-                  <th>Total</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.map(order => (
-                  <tr key={order.id}>
-                    <td style={{ color: 'var(--color-gold)', fontWeight: 600 }}>{order.orderNumber}</td>
-                    <td>{order.customerName}</td>
-                    <td>{order.phone}</td>
-                    <td>{order.city}</td>
-                    <td>Rs. {order.total?.toLocaleString()}</td>
-                    <td>{new Date(order.createdAt).toLocaleDateString()}</td>
-                    <td>
+          <>
+            <div className="admin-table-view" style={{ overflowX: 'auto' }}>
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Order #</th>
+                    <th>Customer</th>
+                    <th>Phone</th>
+                    <th>City</th>
+                    <th>Total</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map(order => (
+                    <tr key={order.id}>
+                      <td style={{ color: 'var(--color-gold)', fontWeight: 600 }}>{order.orderNumber}</td>
+                      <td>{order.customerName}</td>
+                      <td>{order.phone}</td>
+                      <td>{order.city}</td>
+                      <td>Rs. {order.total?.toLocaleString()}</td>
+                      <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                      <td>
+                        <select
+                          className="form-select"
+                          style={{ padding: '0.3rem 0.5rem', fontSize: '0.8rem', width: 'auto' }}
+                          value={order.status}
+                          onChange={e => handleStatusChange(order.id, e.target.value)}
+                        >
+                          <option value="pending">Pending</option>
+                          <option value="confirmed">Confirmed</option>
+                          <option value="shipped">Shipped</option>
+                          <option value="delivered">Delivered</option>
+                          <option value="cancelled">Cancelled</option>
+                        </select>
+                      </td>
+                      <td>
+                        <button className="btn btn-secondary btn-sm" style={{ marginRight: '0.5rem' }} onClick={() => setSelectedOrder(order)}>Details</button>
+                        <button className="btn btn-sm" style={{ background: 'rgba(239, 68, 68, 0.2)', color: 'var(--color-error)' }} onClick={() => handleDelete(order.id)}>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="admin-card-list">
+              {orders.map(order => (
+                <div className="admin-card" key={order.id}>
+                  <div className="admin-card-body">
+                    <div className="admin-card-row" style={{ marginBottom: '0.35rem' }}>
+                      <span style={{ color: 'var(--color-gold)', fontWeight: 700 }}>{order.orderNumber}</span>
+                      <span className="admin-card-price">Rs. {order.total?.toLocaleString()}</span>
+                    </div>
+                    <div className="admin-card-row">
+                      <span>{order.customerName} · {order.city}</span>
+                    </div>
+                    <div className="admin-card-row">
+                      <span>{order.phone}</span>
+                      <span>{new Date(order.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <div className="admin-card-badges">
                       <select
                         className="form-select"
                         style={{ padding: '0.3rem 0.5rem', fontSize: '0.8rem', width: 'auto' }}
@@ -99,16 +139,16 @@ export default function AdminOrdersPage() {
                         <option value="delivered">Delivered</option>
                         <option value="cancelled">Cancelled</option>
                       </select>
-                    </td>
-                    <td>
-                      <button className="btn btn-secondary btn-sm" style={{ marginRight: '0.5rem' }} onClick={() => setSelectedOrder(order)}>Details</button>
+                    </div>
+                    <div className="admin-card-actions">
+                      <button className="btn btn-secondary btn-sm" onClick={() => setSelectedOrder(order)}>Details</button>
                       <button className="btn btn-sm" style={{ background: 'rgba(239, 68, 68, 0.2)', color: 'var(--color-error)' }} onClick={() => handleDelete(order.id)}>Delete</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
 
         {selectedOrder && (
@@ -125,7 +165,7 @@ export default function AdminOrdersPage() {
                 <p><strong>Email:</strong> {selectedOrder.email || 'N/A'}</p>
                 <p><strong>Address:</strong> {selectedOrder.address}, {selectedOrder.city}</p>
                 {selectedOrder.notes && <p><strong>Notes:</strong> {selectedOrder.notes}</p>}
-                <p><strong>Payment Method:</strong> Cash on Delivery (COD)</p>
+                <p><strong>Payment Method:</strong> {selectedOrder.paymentMethod}</p>
                 <p><strong>Status:</strong> <span className={`status-badge status-${selectedOrder.status}`}>{selectedOrder.status}</span></p>
               </div>
 

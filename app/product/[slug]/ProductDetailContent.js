@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useCart } from '../../components/CartContext';
 import { IconDroplet, IconShield, IconPackage, IconCreditCard, IconGear, IconSparkles, IconStar, IconCheck } from '../../components/Icons';
 import { getProductReviews, getAverageRating } from '../../data/reviews';
@@ -7,12 +7,28 @@ import Reveal from '../../components/Reveal';
 import Link from 'next/link';
 
 export default function ProductDetailContent({ product }) {
-  const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || '');
+  const firstAvailableSize = product.sizes?.find(s => !product.unavailableSizes?.includes(s)) ?? product.sizes?.[0] ?? '';
+  const [selectedSize, setSelectedSize] = useState(firstAvailableSize);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
   const { addToCart } = useCart();
   const images = product.images?.length ? product.images : ['/images/products/logo.jpg'];
+  const touchStartX = useRef(null);
+
+  const showImage = (i) => setSelectedImage((i + images.length) % images.length);
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(delta) < 40) return;
+    showImage(selectedImage + (delta < 0 ? 1 : -1));
+  };
 
   const handleAddToCart = () => {
     addToCart(product, selectedSize, quantity);
@@ -31,7 +47,11 @@ export default function ProductDetailContent({ product }) {
     <>
     <div className="product-detail">
       <div className="product-gallery">
-        <div className="product-main-image">
+        <div
+          className="product-main-image"
+          onTouchStart={images.length > 1 ? handleTouchStart : undefined}
+          onTouchEnd={images.length > 1 ? handleTouchEnd : undefined}
+        >
           <img src={images[selectedImage] || images[0]} alt={product.name} />
         </div>
         {images.length > 1 && (
@@ -41,7 +61,8 @@ export default function ProductDetailContent({ product }) {
                 key={img}
                 type="button"
                 className={`product-thumbnail ${i === selectedImage ? 'active' : ''}`}
-                onClick={() => setSelectedImage(i)}
+                onClick={() => showImage(i)}
+                onMouseEnter={() => showImage(i)}
                 aria-label={`View image ${i + 1} of ${product.name}`}
               >
                 <img src={img} alt="" />
@@ -82,15 +103,21 @@ export default function ProductDetailContent({ product }) {
           <div className="product-options">
             <div className="product-option-label">Size</div>
             <div className="size-options">
-              {product.sizes.map(size => (
-                <button
-                  key={size}
-                  className={`size-btn ${selectedSize === size ? 'active' : ''}`}
-                  onClick={() => setSelectedSize(size)}
-                >
-                  {size}
-                </button>
-              ))}
+              {product.sizes.map(size => {
+                const unavailable = product.unavailableSizes?.includes(size);
+                return (
+                  <button
+                    key={size}
+                    className={`size-btn ${selectedSize === size ? 'active' : ''} ${unavailable ? 'unavailable' : ''}`}
+                    onClick={() => !unavailable && setSelectedSize(size)}
+                    disabled={unavailable}
+                    aria-disabled={unavailable}
+                    title={unavailable ? `${size} — out of stock` : size}
+                  >
+                    {size}
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
@@ -113,7 +140,7 @@ export default function ProductDetailContent({ product }) {
         </div>
 
         <Link href="/checkout" className="btn btn-outline btn-block" onClick={handleAddToCart}>
-          Buy Now — Cash on Delivery
+          Buy Now
         </Link>
 
         <div className="product-features">
@@ -131,7 +158,7 @@ export default function ProductDetailContent({ product }) {
           </div>
           <div className="product-feature">
             <span className="product-feature-icon"><IconCreditCard width="20" height="20" /></span>
-            <span>Cash on Delivery</span>
+            <span>Flexible Payment</span>
           </div>
           <div className="product-feature">
             <span className="product-feature-icon"><IconGear width="20" height="20" /></span>

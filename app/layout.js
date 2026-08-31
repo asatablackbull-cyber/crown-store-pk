@@ -1,10 +1,7 @@
 import { Fraunces, Public_Sans } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from './components/CartContext';
-import Navbar from './components/Navbar';
-import CartDrawer from './components/CartDrawer';
-import Footer from './components/Footer';
-import { IconMessageCircle } from './components/Icons';
+import StoreChrome from './components/StoreChrome';
 
 const fraunces = Fraunces({
   subsets: ['latin'],
@@ -23,7 +20,7 @@ const publicSans = Public_Sans({
 
 export const metadata = {
   title: 'Crown Store PK — Luxury Waterproof Jewelry',
-  description: 'At Crown Store PK, we redefine modern everyday luxury. Marine-grade 316L stainless steel jewelry that is 100% waterproof, sweat-resistant, and tarnish-proof. Cash on Delivery across Pakistan.',
+  description: 'At Crown Store PK, we redefine modern everyday luxury. Marine-grade 316L stainless steel jewelry that is 100% waterproof, sweat-resistant, and tarnish-proof. Nationwide delivery across Pakistan with flexible payment options.',
   keywords: 'jewelry, luxury jewelry, waterproof jewelry, stainless steel jewelry, Pakistan, bracelets, rings, pendants, Crown Store PK',
   openGraph: {
     title: 'Crown Store PK — Luxury Waterproof Jewelry',
@@ -34,22 +31,17 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${publicSans.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${publicSans.variable}`} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body>
         <CartProvider>
-          <Navbar />
-          <CartDrawer />
-          <main>{children}</main>
-          <Footer />
-          <a
-            href="https://wa.me/923001234567?text=Hi%20Crown%20Store%20PK!%20I'm%20interested%20in%20your%20jewelry."
-            className="whatsapp-float"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Chat on WhatsApp"
-          >
-            <IconMessageCircle width="26" height="26" />
-          </a>
+          <StoreChrome>{children}</StoreChrome>
         </CartProvider>
       </body>
     </html>

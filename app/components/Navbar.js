@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCart } from './CartContext';
 import { IconX, IconLogout } from './Icons';
+import ThemeToggle from './ThemeToggle';
 
 const DEFAULT_MESSAGES = [
   '✦ FREE SHIPPING ACROSS PAKISTAN',
   '✦ 100% WATERPROOF JEWELRY',
-  '✦ CASH ON DELIVERY AVAILABLE',
+  '✦ FLEXIBLE PAYMENT OPTIONS',
   '✦ TARNISH-PROOF GUARANTEE',
   '✦ PREMIUM LUXURY PACKAGING'
 ];
@@ -103,6 +104,7 @@ export default function Navbar() {
           </ul>
 
           <div className="navbar-actions">
+            <ThemeToggle className="navbar-theme-toggle" />
             <Link href={accountHref} className="navbar-icon" title={user ? 'My Account' : 'Account'}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -141,6 +143,7 @@ export default function Navbar() {
         <Link href="/contact" onClick={() => setMobileOpen(false)}>Contact</Link>
         <Link href={accountHref} onClick={() => setMobileOpen(false)}>{user ? 'My Account' : 'Account'}</Link>
         {user && <button type="button" className="mobile-nav-logout" onClick={handleLogout}>Logout</button>}
+        <ThemeToggle className="mobile-nav-theme-toggle" />
       </div>
     </>
   );

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import getDb from '@/lib/db';
 import { isAdmin, getUserFromRequest } from '@/lib/auth';
 import { getSetting } from '@/lib/settings';
+import { getPaymentMethodById } from '@/lib/paymentMethods';
 import { validateCoupon, incrementCouponUsage } from '@/lib/coupons';
 import { sendOrderNotification } from '@/lib/mail';
 import { v4 as uuidv4 } from 'uuid';
@@ -31,10 +32,15 @@ export async function POST(request) {
   try {
     const db = getDb();
     const body = await request.json();
-    const { customerName, phone, email, address, city, items, notes, couponCode, paymentMethod } = body;
+    const { customerName, phone, email, address, city, items, notes, couponCode, paymentMethodId } = body;
 
     if (!customerName || !phone || !address || !city || !items || items.length === 0) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    const selectedMethod = getPaymentMethodById(paymentMethodId);
+    if (!selectedMethod || !selectedMethod.enabled) {
+      return NextResponse.json({ error: 'Please select a valid payment method' }, { status: 400 });
     }
 
     // Never trust prices/names from the client — look up each item by slug and
@@ -73,9 +79,9 @@ export async function POST(request) {
       appliedCoupon = result.coupon.code;
     }
 
-    const method = paymentMethod === 'bank_transfer' ? 'bank_transfer' : 'cod';
-    const codFee = method === 'cod' ? (parseFloat(getSetting('codFee', '0')) || 0) : 0;
-    const shippingCost = codFee;
+    const methodFee = parseFloat(selectedMethod.extraFee) || 0;
+    const shippingCharge = parseFloat(getSetting('shippingCharge', '0')) || 0;
+    const shippingCost = methodFee + shippingCharge;
     const total = Math.max(0, subtotal - discountAmount + shippingCost);
     const orderNumber = 'CS-' + uuidv4().substring(0, 8).toUpperCase();
 
@@ -84,7 +90,7 @@ export async function POST(request) {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
       orderNumber, customerName, phone, email || '', address, city,
-      JSON.stringify(verifiedItems), subtotal, shippingCost, total, notes || '', method,
+      JSON.stringify(verifiedItems), subtotal, shippingCost, total, notes || '', selectedMethod.name,
       appliedCoupon, discountAmount
     );
 
@@ -94,7 +100,7 @@ export async function POST(request) {
 
     const order = {
       id: result.lastInsertRowid, orderNumber, customerName, phone, email, address, city,
-      items: verifiedItems, subtotal, shippingCost, total, notes, paymentMethod: method, couponCode: appliedCoupon, discountAmount
+      items: verifiedItems, subtotal, shippingCost, total, notes, paymentMethod: selectedMethod.name, couponCode: appliedCoupon, discountAmount
     };
     await sendOrderNotification(order);
 

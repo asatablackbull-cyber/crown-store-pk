@@ -70,7 +70,7 @@ export default function HomePage() {
           </h1>
           <p>
             Marine-grade 316L stainless steel jewelry — 100% waterproof, sweat-resistant, and tarnish-proof.
-            Designed to last. Delivered across Pakistan with Cash on Delivery.
+            Designed to last. Delivered across Pakistan with flexible payment options.
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/shop" className="btn btn-primary btn-lg">
@@ -98,8 +98,8 @@ export default function HomePage() {
           </Reveal>
           <Reveal as="div" className="feature-card" delay={160}>
             <div className="feature-icon"><IconPackage /></div>
-            <h3 className="feature-title">Cash on Delivery</h3>
-            <p className="feature-text">Nationwide COD across Pakistan. Pay when it arrives at your doorstep.</p>
+            <h3 className="feature-title">Flexible Payment</h3>
+            <p className="feature-text">Choose from multiple payment options at checkout, including Cash on Delivery.</p>
           </Reveal>
           <Reveal as="div" className="feature-card" delay={240}>
             <div className="feature-icon"><IconSparkles /></div>
@@ -164,7 +164,7 @@ export default function HomePage() {
       </section>
 
       {/* MATERIAL HIGHLIGHTS */}
-      <section className="section" style={{ background: 'var(--color-bg-secondary)', maxWidth: '100%', padding: '5rem 2rem' }}>
+      <section className="section section-alt-bg">
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <Reveal className="section-header">
             <div className="section-label">Premium Materials</div>
@@ -240,7 +240,7 @@ export default function HomePage() {
         </h2>
         <p className="section-subtitle" style={{ marginBottom: '2.5rem' }}>
           Thousands of individuals across Pakistan trust Crown Store PK for timeless,
-          high-end jewelry at affordable prices. Free shipping. Cash on Delivery.
+          high-end jewelry at affordable prices. Free shipping. Flexible payment options.
         </p>
         <Link href="/shop" className="btn btn-primary btn-lg">
           Shop Now →

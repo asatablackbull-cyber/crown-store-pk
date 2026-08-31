@@ -30,14 +30,14 @@ export default function AboutPage() {
             in the gym, at work, or during high-profile evenings.
           </p>
           <p>
-            Backed by bespoke luxury packaging, nationwide Cash on Delivery across Pakistan, and a 
-            commitment to precision craftsmanship, Crown Store PK bridges the gap between affordable 
+            Backed by bespoke luxury packaging, nationwide delivery with flexible payment options, and a
+            commitment to precision craftsmanship, Crown Store PK bridges the gap between affordable
             pricing and timeless, high-end design.
           </p>
         </Reveal>
       </section>
 
-      <section className="section" id="materials" style={{ background: 'var(--color-bg-secondary)', maxWidth: '100%', padding: '5rem 2rem' }}>
+      <section className="section section-alt-bg" id="materials">
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <div className="section-header">
             <div className="section-label">Materials</div>
@@ -78,8 +78,8 @@ export default function AboutPage() {
           </Reveal>
           <Reveal as="div" className="feature-card" delay={80}>
             <div className="feature-icon"><IconCreditCard /></div>
-            <h3 className="feature-title">Cash on Delivery</h3>
-            <p className="feature-text">Pay when your order arrives at your doorstep. No advance payment needed.</p>
+            <h3 className="feature-title">Flexible Payment</h3>
+            <p className="feature-text">Choose from multiple payment options at checkout, including Cash on Delivery.</p>
           </Reveal>
           <Reveal as="div" className="feature-card" delay={160}>
             <div className="feature-icon"><IconCalendar /></div>

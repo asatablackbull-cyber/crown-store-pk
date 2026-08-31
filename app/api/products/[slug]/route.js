@@ -32,7 +32,7 @@ export async function PUT(request, { params }) {
         fields.push(`${key} = ?`);
         values.push(value);
       }
-      if (key === 'images' || key === 'sizes') {
+      if (key === 'images' || key === 'sizes' || key === 'unavailableSizes') {
         fields.push(`${key} = ?`);
         values.push(JSON.stringify(value));
       }

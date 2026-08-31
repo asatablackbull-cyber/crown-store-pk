@@ -52,7 +52,7 @@ export default function CartPage() {
               <div className="summary-item"><span>Shipping</span><span style={{ color: 'var(--color-success)' }}>FREE</span></div>
               <div className="summary-total"><span>Total</span><span className="amount">Rs. {totalPrice.toLocaleString()}</span></div>
               <Link href="/checkout" className="btn btn-primary btn-block" style={{ marginTop: '1.5rem' }}>Proceed to Checkout</Link>
-              <div className="cod-badge" style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><IconCreditCard width="18" height="18" /> Cash on Delivery Available</div>
+              <div className="cod-badge" style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><IconCreditCard width="18" height="18" /> Multiple Payment Options Available</div>
             </div>
           </div>
         )}

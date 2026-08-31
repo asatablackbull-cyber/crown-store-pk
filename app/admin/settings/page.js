@@ -7,10 +7,6 @@ const emptySettings = {
   announcementEnabled: false,
   announcementText: '',
   notificationEmail: '',
-  codFee: '0',
-  onlinePaymentEnabled: false,
-  onlinePaymentProvider: '',
-  onlinePaymentInstructions: '',
   smtpHost: '',
   smtpPort: '587',
   smtpSecure: false,
@@ -47,7 +43,6 @@ export default function AdminSettingsPage() {
           ...emptySettings,
           ...data,
           announcementEnabled: data.announcementEnabled === '1',
-          onlinePaymentEnabled: data.onlinePaymentEnabled === '1',
           smtpSecure: data.smtpSecure === '1'
         });
         setLoading(false);
@@ -66,7 +61,6 @@ export default function AdminSettingsPage() {
     const payload = {
       ...form,
       announcementEnabled: form.announcementEnabled ? '1' : '0',
-      onlinePaymentEnabled: form.onlinePaymentEnabled ? '1' : '0',
       smtpSecure: form.smtpSecure ? '1' : '0'
     };
     try {
@@ -263,38 +257,10 @@ export default function AdminSettingsPage() {
             </div>
           </section>
 
-          <section className="stat-card">
-            <h3 style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-gold)', marginBottom: '1.25rem' }}>Payment Settings</h3>
-            <div className="form-group">
-              <label className="form-label">Cash on Delivery Charges (Rs.)</label>
-              <input className="form-input" type="number" min="0" value={form.codFee} onChange={e => set('codFee', e.target.value)} placeholder="0" />
-            </div>
-            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-dim)', marginTop: '-0.5rem', marginBottom: '1.25rem' }}>
-              Added to every Cash on Delivery order. Leave at 0 for free COD.
-            </p>
-
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.85rem', marginBottom: '1rem' }}>
-              <input type="checkbox" checked={form.onlinePaymentEnabled} onChange={e => set('onlinePaymentEnabled', e.target.checked)} />
-              Offer an additional online / bank transfer payment option at checkout
-            </label>
-            {form.onlinePaymentEnabled && (
-              <>
-                <div className="form-group">
-                  <label className="form-label">Provider / Method Name</label>
-                  <input className="form-input" value={form.onlinePaymentProvider} onChange={e => set('onlinePaymentProvider', e.target.value)} placeholder="e.g. Bank Transfer, JazzCash, EasyPaisa" />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Payment Instructions</label>
-                  <textarea className="form-textarea" value={form.onlinePaymentInstructions} onChange={e => set('onlinePaymentInstructions', e.target.value)} placeholder="e.g. Account Title: Crown Store PK, IBAN: PK00XXXX..., send screenshot on WhatsApp after transfer." />
-                </div>
-                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-dim)' }}>
-                  Note: this shows customers your instructions at checkout for a manual transfer — it does not automatically charge a card.
-                  Connecting a live gateway (JazzCash, EasyPaisa, Stripe) needs a merchant account with that provider; once you have API
-                  credentials, share them and this can be wired up to process payments automatically.
-                </p>
-              </>
-            )}
-          </section>
+          <div style={{ fontSize: '0.85rem', color: 'var(--color-text-dim)' }}>
+            Looking for shipping charges or payment methods (Cash on Delivery, bank transfer, and more)? Those moved to{' '}
+            <a href="/admin/delivery" style={{ color: 'var(--color-gold)' }}>Delivery &amp; Payment</a>.
+          </div>
 
           <button type="submit" className="btn btn-primary" disabled={saving} style={{ alignSelf: 'flex-start' }}>
             {saving ? 'Saving...' : 'Save Settings'}

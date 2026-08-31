@@ -99,44 +99,78 @@ export default function AdminCouponsPage() {
         {coupons.length === 0 ? (
           <p style={{ color: 'var(--color-text-dim)' }}>No coupons yet. Create one to offer discounts at checkout.</p>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Code</th>
-                  <th>Discount</th>
-                  <th>Min. Order</th>
-                  <th>Usage</th>
-                  <th>Expires</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {coupons.map(c => (
-                  <tr key={c.id}>
-                    <td style={{ color: 'var(--color-gold)', fontWeight: 700 }}>{c.code}</td>
-                    <td>{c.discountType === 'fixed' ? `Rs. ${c.discountValue}` : `${c.discountValue}%`}</td>
-                    <td>{c.minOrderAmount > 0 ? `Rs. ${c.minOrderAmount.toLocaleString()}` : '—'}</td>
-                    <td>{c.usedCount}{c.usageLimit ? ` / ${c.usageLimit}` : ''}</td>
-                    <td>{c.expiresAt ? new Date(c.expiresAt).toLocaleDateString() : '—'}</td>
-                    <td>
+          <>
+            <div className="admin-table-view" style={{ overflowX: 'auto' }}>
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Discount</th>
+                    <th>Min. Order</th>
+                    <th>Usage</th>
+                    <th>Expires</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {coupons.map(c => (
+                    <tr key={c.id}>
+                      <td style={{ color: 'var(--color-gold)', fontWeight: 700 }}>{c.code}</td>
+                      <td>{c.discountType === 'fixed' ? `Rs. ${c.discountValue}` : `${c.discountValue}%`}</td>
+                      <td>{c.minOrderAmount > 0 ? `Rs. ${c.minOrderAmount.toLocaleString()}` : '—'}</td>
+                      <td>{c.usedCount}{c.usageLimit ? ` / ${c.usageLimit}` : ''}</td>
+                      <td>{c.expiresAt ? new Date(c.expiresAt).toLocaleDateString() : '—'}</td>
+                      <td>
+                        <span className={`status-badge ${c.active ? 'status-delivered' : 'status-cancelled'}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                          {c.active ? <IconCheck width="12" height="12" /> : <IconX width="12" height="12" />}
+                          {c.active ? 'Active' : 'Disabled'}
+                        </span>
+                      </td>
+                      <td>
+                        <button className="btn btn-secondary btn-sm" style={{ marginRight: '0.5rem' }} onClick={() => toggleActive(c)}>
+                          {c.active ? 'Disable' : 'Enable'}
+                        </button>
+                        <button className="btn btn-sm" style={{ background: 'rgba(239, 68, 68, 0.2)', color: 'var(--color-error)' }} onClick={() => handleDelete(c.id)}>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="admin-card-list">
+              {coupons.map(c => (
+                <div className="admin-card" key={c.id}>
+                  <div className="admin-card-body">
+                    <div className="admin-card-row" style={{ marginBottom: '0.35rem' }}>
+                      <span style={{ color: 'var(--color-gold)', fontWeight: 700, fontSize: '0.95rem' }}>{c.code}</span>
+                      <span className="admin-card-price">{c.discountType === 'fixed' ? `Rs. ${c.discountValue}` : `${c.discountValue}%`} off</span>
+                    </div>
+                    <div className="admin-card-row">
+                      <span>Min order: {c.minOrderAmount > 0 ? `Rs. ${c.minOrderAmount.toLocaleString()}` : '—'}</span>
+                      <span>Used: {c.usedCount}{c.usageLimit ? ` / ${c.usageLimit}` : ''}</span>
+                    </div>
+                    <div className="admin-card-row">
+                      <span>Expires: {c.expiresAt ? new Date(c.expiresAt).toLocaleDateString() : 'Never'}</span>
+                    </div>
+                    <div className="admin-card-badges">
                       <span className={`status-badge ${c.active ? 'status-delivered' : 'status-cancelled'}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
                         {c.active ? <IconCheck width="12" height="12" /> : <IconX width="12" height="12" />}
                         {c.active ? 'Active' : 'Disabled'}
                       </span>
-                    </td>
-                    <td>
-                      <button className="btn btn-secondary btn-sm" style={{ marginRight: '0.5rem' }} onClick={() => toggleActive(c)}>
+                    </div>
+                    <div className="admin-card-actions">
+                      <button className="btn btn-secondary btn-sm" onClick={() => toggleActive(c)}>
                         {c.active ? 'Disable' : 'Enable'}
                       </button>
                       <button className="btn btn-sm" style={{ background: 'rgba(239, 68, 68, 0.2)', color: 'var(--color-error)' }} onClick={() => handleDelete(c.id)}>Delete</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
 
         {showModal && (

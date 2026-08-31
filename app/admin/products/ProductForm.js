@@ -3,21 +3,25 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import AdminSidebar from '../components/AdminSidebar';
+import { IconX } from '../../components/Icons';
 
 function buildInitialForm(product) {
   if (!product) {
     return {
       name: '', slug: '', shortDescription: '', ribbon: '', description: '',
       price: '', comparePrice: '', sku: '', weight: '',
-      category: '', sizes: 'S, M, L', material: '316L Stainless Steel',
+      category: '', sizeList: [], material: '316L Stainless Steel',
       images: [], inStock: true, featured: false
     };
   }
+  const unavailable = product.unavailableSizes || [];
   return {
     name: product.name, slug: product.slug, shortDescription: product.shortDescription || '', ribbon: product.ribbon || '',
     description: product.description || '', price: product.price, comparePrice: product.comparePrice || '',
     sku: product.sku || '', weight: product.weight || '',
-    category: product.category || '', sizes: (product.sizes || []).join(', '), material: product.material || '316L Stainless Steel',
+    category: product.category || '',
+    sizeList: (product.sizes || []).map(value => ({ value, available: !unavailable.includes(value) })),
+    material: product.material || '316L Stainless Steel',
     images: product.images?.length ? product.images : [], inStock: product.inStock, featured: product.featured
   };
 }
@@ -117,20 +121,32 @@ export default function ProductForm({ mode, product }) {
 
   const removeImage = (index) => setForm(f => ({ ...f, images: f.images.filter((_, i) => i !== index) }));
 
+  const addSize = () => setForm(f => ({ ...f, sizeList: [...f.sizeList, { value: '', available: true }] }));
+  const removeSize = (index) => setForm(f => ({ ...f, sizeList: f.sizeList.filter((_, i) => i !== index) }));
+  const updateSizeValue = (index, value) => setForm(f => ({
+    ...f, sizeList: f.sizeList.map((s, i) => i === index ? { ...s, value } : s)
+  }));
+  const toggleSizeAvailable = (index, available) => setForm(f => ({
+    ...f, sizeList: f.sizeList.map((s, i) => i === index ? { ...s, available } : s)
+  }));
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError('');
     setSaving(true);
     const token = localStorage.getItem('token');
+    const cleanSizes = form.sizeList.filter(s => s.value.trim());
     const payload = {
       ...form,
       price: parseFloat(form.price),
       comparePrice: form.comparePrice ? parseFloat(form.comparePrice) : null,
       weight: form.weight ? parseFloat(form.weight) : null,
       images: form.images.length ? form.images : ['/images/products/logo.jpg'],
-      sizes: form.sizes.split(',').map(s => s.trim()).filter(Boolean),
+      sizes: cleanSizes.map(s => s.value.trim()),
+      unavailableSizes: cleanSizes.filter(s => !s.available).map(s => s.value.trim()),
       slug: form.slug || form.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
     };
+    delete payload.sizeList;
 
     try {
       const res = mode === 'edit'
@@ -244,16 +260,40 @@ export default function ProductForm({ mode, product }) {
 
               <section className="stat-card">
                 <h3 className="product-form-section-title">Options</h3>
-                <div className="form-grid-2">
-                  <div className="form-group">
-                    <label className="form-label">Material</label>
-                    <input className="form-input" value={form.material} onChange={e => set('material', e.target.value)} />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">Sizes (comma separated)</label>
-                    <input className="form-input" value={form.sizes} onChange={e => set('sizes', e.target.value)} placeholder="S, M, L" />
-                  </div>
+                <div className="form-group">
+                  <label className="form-label">Material</label>
+                  <input className="form-input" value={form.material} onChange={e => set('material', e.target.value)} />
                 </div>
+
+                <div className="form-group">
+                  <label className="form-label">Sizes</label>
+                  {form.sizeList.length > 0 && (
+                    <div className="size-editor-list">
+                      {form.sizeList.map((s, i) => (
+                        <div className="size-editor-row" key={i}>
+                          <input
+                            className="form-input"
+                            value={s.value}
+                            onChange={e => updateSizeValue(i, e.target.value)}
+                            placeholder="e.g. One Size, US 8, 18"
+                          />
+                          <label className="size-editor-toggle">
+                            <input type="checkbox" checked={s.available} onChange={e => toggleSizeAvailable(i, e.target.checked)} />
+                            Available
+                          </label>
+                          <button type="button" className="size-editor-remove" onClick={() => removeSize(i)} aria-label="Remove size">
+                            <IconX width="14" height="14" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <button type="button" className="btn btn-outline btn-sm" onClick={addSize}>+ Add Size</button>
+                  <p style={{ fontSize: '0.78rem', color: 'var(--color-text-dim)', marginTop: '0.75rem' }}>
+                    Uncheck "Available" to show a size as sold out on the product page — customers will see it crossed out and won't be able to select it.
+                  </p>
+                </div>
+
                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.85rem' }}>
                   <input type="checkbox" checked={form.featured} onChange={e => set('featured', e.target.checked)} />
                   Featured on Home

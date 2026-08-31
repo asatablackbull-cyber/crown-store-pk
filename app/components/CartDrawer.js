@@ -53,7 +53,7 @@ export default function CartDrawer() {
               <span className="amount">Rs. {totalPrice.toLocaleString()}</span>
             </div>
             <Link href="/checkout" className="btn btn-primary btn-block" onClick={() => setIsOpen(false)}>
-              Checkout — COD
+              Checkout
             </Link>
             <Link href="/cart" className="btn btn-outline btn-block" onClick={() => setIsOpen(false)} style={{ marginTop: '0.5rem' }}>
               View Full Cart

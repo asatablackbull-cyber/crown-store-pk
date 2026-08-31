@@ -55,44 +55,74 @@ export default function AdminProductsPage() {
         {loading ? (
           <div className="loading-spinner"><div className="spinner" /></div>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Image</th>
-                  <th>Name</th>
-                  <th>Category</th>
-                  <th>Price</th>
-                  <th>Stock</th>
-                  <th>Featured</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map(p => (
-                  <tr key={p.id}>
-                    <td>
-                      <img src={p.images?.[0] || '/images/products/logo.jpg'} alt={p.name} style={{ width: '44px', height: '44px', objectFit: 'cover', borderRadius: '4px' }} />
-                    </td>
-                    <td style={{ fontWeight: 600, color: 'var(--color-white)' }}>{p.name}</td>
-                    <td style={{ textTransform: 'capitalize' }}>{p.category}</td>
-                    <td style={{ color: 'var(--color-gold)' }}>Rs. {p.price?.toLocaleString()}</td>
-                    <td>
+          <>
+            <div className="admin-table-view" style={{ overflowX: 'auto' }}>
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Featured</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map(p => (
+                    <tr key={p.id}>
+                      <td>
+                        <img src={p.images?.[0] || '/images/products/logo.jpg'} alt={p.name} style={{ width: '44px', height: '44px', objectFit: 'cover', borderRadius: '4px' }} />
+                      </td>
+                      <td style={{ fontWeight: 600, color: 'var(--color-white)' }}>{p.name}</td>
+                      <td style={{ textTransform: 'capitalize' }}>{p.category}</td>
+                      <td style={{ color: 'var(--color-gold)' }}>Rs. {p.price?.toLocaleString()}</td>
+                      <td>
+                        <span className={`status-badge ${p.inStock ? 'status-delivered' : 'status-cancelled'}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                          {p.inStock ? <IconCheck width="12" height="12" /> : <IconX width="12" height="12" />}
+                          {p.inStock ? 'In Stock' : 'Out of Stock'}
+                        </span>
+                      </td>
+                      <td>{p.featured ? <span className="status-badge status-confirmed">Featured</span> : <span style={{ color: 'var(--color-text-dim)' }}>—</span>}</td>
+                      <td>
+                        <Link href={`/admin/products/${p.slug}`} className="btn btn-secondary btn-sm" style={{ marginRight: '0.5rem' }}>Edit</Link>
+                        <button className="btn btn-sm" style={{ background: 'rgba(239, 68, 68, 0.2)', color: 'var(--color-error)' }} onClick={() => handleDelete(p.slug)}>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="admin-card-list">
+              {products.map(p => (
+                <div className="admin-card" key={p.id}>
+                  <div className="admin-card-media">
+                    <img src={p.images?.[0] || '/images/products/logo.jpg'} alt={p.name} />
+                  </div>
+                  <div className="admin-card-body">
+                    <div className="admin-card-title">{p.name}</div>
+                    <div className="admin-card-row">
+                      <span style={{ textTransform: 'capitalize' }}>{p.category}</span>
+                      <span className="admin-card-price">Rs. {p.price?.toLocaleString()}</span>
+                    </div>
+                    <div className="admin-card-badges">
                       <span className={`status-badge ${p.inStock ? 'status-delivered' : 'status-cancelled'}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
                         {p.inStock ? <IconCheck width="12" height="12" /> : <IconX width="12" height="12" />}
                         {p.inStock ? 'In Stock' : 'Out of Stock'}
                       </span>
-                    </td>
-                    <td>{p.featured ? <span className="status-badge status-confirmed">Featured</span> : <span style={{ color: 'var(--color-text-dim)' }}>—</span>}</td>
-                    <td>
-                      <Link href={`/admin/products/${p.slug}`} className="btn btn-secondary btn-sm" style={{ marginRight: '0.5rem' }}>Edit</Link>
+                      {p.featured && <span className="status-badge status-confirmed">Featured</span>}
+                    </div>
+                    <div className="admin-card-actions">
+                      <Link href={`/admin/products/${p.slug}`} className="btn btn-secondary btn-sm">Edit</Link>
                       <button className="btn btn-sm" style={{ background: 'rgba(239, 68, 68, 0.2)', color: 'var(--color-error)' }} onClick={() => handleDelete(p.slug)}>Delete</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </main>
     </div>

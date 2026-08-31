@@ -15,7 +15,8 @@ export default function ProductCard({ product }) {
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    addToCart(product, product.sizes?.[0] || '');
+    const firstAvailableSize = product.sizes?.find(s => !product.unavailableSizes?.includes(s)) ?? product.sizes?.[0] ?? '';
+    addToCart(product, firstAvailableSize);
   };
 
   return (
