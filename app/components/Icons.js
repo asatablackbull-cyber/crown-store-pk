@@ -222,6 +222,14 @@ export function IconLogout(props) {
   );
 }
 
+export function IconChevronDown(props) {
+  return (
+    <Svg {...props}>
+      <polyline points="6 9 12 15 18 9" />
+    </Svg>
+  );
+}
+
 export function IconTiktok(props) {
   return (
     <Svg {...props}>
