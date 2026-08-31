@@ -2575,6 +2575,10 @@ img {
     position: static;
     top: auto;
   }
+  .checkout-layout--review .order-summary {
+    order: -1;
+    margin-bottom: 2rem;
+  }
   .admin-layout {
     grid-template-columns: 1fr;
     padding-top: 56px;

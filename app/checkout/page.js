@@ -181,7 +181,7 @@ export default function CheckoutPage() {
         ))}
       </div>
 
-      <div className="checkout-layout">
+      <div className={`checkout-layout ${step === 2 ? 'checkout-layout--review' : ''}`}>
         <div className="checkout-form-section">
           {step === 0 && (
             <>
