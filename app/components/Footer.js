@@ -1,7 +1,21 @@
+'use client';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { IconInstagram, IconFacebook, IconTiktok, IconMessageCircle } from './Icons';
+import { normalizeWhatsapp } from '../../lib/whatsapp';
 
 export default function Footer() {
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/settings', { cache: 'no-store' })
+      .then(r => r.json())
+      .then(setSettings)
+      .catch(() => {});
+  }, []);
+
+  const whatsapp = normalizeWhatsapp(settings?.whatsappNumber);
+
   return (
     <footer className="footer">
       <div className="footer-inner">
@@ -13,7 +27,7 @@ export default function Footer() {
             </div>
           </div>
           <p>
-            Redefining modern everyday luxury through minimalism, resilience, and uncompromised confidence. 
+            Redefining modern everyday luxury through minimalism, resilience, and uncompromised confidence.
             Marine-grade 316L stainless steel jewelry that is 100% waterproof, sweat-resistant, and tarnish-proof.
           </p>
         </div>
@@ -62,10 +76,18 @@ export default function Footer() {
       <div className="footer-bottom">
         <p>© {new Date().getFullYear()} Crown Store PK. All rights reserved.</p>
         <div className="footer-social">
-          <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><IconInstagram width="17" height="17" /></a>
-          <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><IconFacebook width="17" height="17" /></a>
-          <a href="https://tiktok.com" target="_blank" rel="noopener" aria-label="TikTok"><IconTiktok width="17" height="17" /></a>
-          <a href="https://wa.me/923001234567" target="_blank" rel="noopener" aria-label="WhatsApp"><IconMessageCircle width="17" height="17" /></a>
+          {settings?.socialInstagram && (
+            <a href={settings.socialInstagram} target="_blank" rel="noopener" aria-label="Instagram"><IconInstagram width="17" height="17" /></a>
+          )}
+          {settings?.socialFacebook && (
+            <a href={settings.socialFacebook} target="_blank" rel="noopener" aria-label="Facebook"><IconFacebook width="17" height="17" /></a>
+          )}
+          {settings?.socialTiktok && (
+            <a href={settings.socialTiktok} target="_blank" rel="noopener" aria-label="TikTok"><IconTiktok width="17" height="17" /></a>
+          )}
+          {whatsapp && (
+            <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener" aria-label="WhatsApp"><IconMessageCircle width="17" height="17" /></a>
+          )}
         </div>
       </div>
     </footer>

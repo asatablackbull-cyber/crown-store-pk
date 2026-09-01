@@ -12,7 +12,11 @@ const emptySettings = {
   smtpSecure: false,
   smtpUser: '',
   smtpPass: '',
-  smtpFrom: ''
+  smtpFrom: '',
+  whatsappNumber: '',
+  socialInstagram: '',
+  socialFacebook: '',
+  socialTiktok: ''
 };
 
 export default function AdminSettingsPage() {
@@ -203,6 +207,29 @@ export default function AdminSettingsPage() {
             <div className="form-group">
               <label className="form-label">Announcement Text</label>
               <input className="form-input" value={form.announcementText} onChange={e => set('announcementText', e.target.value)} placeholder="e.g. EID SALE — FLAT 20% OFF ALL BRACELETS" />
+            </div>
+          </section>
+
+          <section className="stat-card">
+            <h3 style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-gold)', marginBottom: '0.5rem' }}>WhatsApp &amp; Social Media</h3>
+            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-dim)', marginBottom: '1.25rem' }}>
+              These power the WhatsApp button, footer icons, and contact page across the site. Leave a field blank to hide that icon.
+            </p>
+            <div className="form-group">
+              <label className="form-label">WhatsApp Number</label>
+              <input className="form-input" value={form.whatsappNumber} onChange={e => set('whatsappNumber', e.target.value)} placeholder="e.g. 03280067355 or 923280067355" />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Instagram URL</label>
+              <input className="form-input" value={form.socialInstagram} onChange={e => set('socialInstagram', e.target.value)} placeholder="https://www.instagram.com/yourpage" />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Facebook URL</label>
+              <input className="form-input" value={form.socialFacebook} onChange={e => set('socialFacebook', e.target.value)} placeholder="https://facebook.com/yourpage" />
+            </div>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">TikTok URL</label>
+              <input className="form-input" value={form.socialTiktok} onChange={e => set('socialTiktok', e.target.value)} placeholder="https://www.tiktok.com/@yourpage" />
             </div>
           </section>
 

@@ -1,12 +1,21 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IconMessageCircle, IconMail } from '../components/Icons';
+import { normalizeWhatsapp } from '../../lib/whatsapp';
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
+
+  useEffect(() => {
+    fetch('/api/settings', { cache: 'no-store' })
+      .then(r => r.json())
+      .then(data => setWhatsapp(normalizeWhatsapp(data.whatsappNumber)))
+      .catch(() => {});
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,7 +53,9 @@ export default function ContactPage() {
             <div className="feature-icon"><IconMessageCircle /></div>
             <h3 className="feature-title">WhatsApp</h3>
             <p className="feature-text">Chat with us instantly</p>
-            <a href="https://wa.me/923001234567" target="_blank" rel="noopener" className="btn btn-outline btn-sm" style={{ marginTop: '1rem' }}>Open WhatsApp</a>
+            {whatsapp && (
+              <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener" className="btn btn-outline btn-sm" style={{ marginTop: '1rem' }}>Open WhatsApp</a>
+            )}
           </div>
           <div className="feature-card" style={{ textAlign: 'left' }}>
             <div className="feature-icon"><IconMail /></div>
