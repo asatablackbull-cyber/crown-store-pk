@@ -7,7 +7,7 @@ import { IconX, IconLogout } from './Icons';
 import ThemeToggle from './ThemeToggle';
 
 const DEFAULT_MESSAGES = [
-  '✦ FREE SHIPPING ACROSS PAKISTAN',
+  '✦ NATIONWIDE DELIVERY ACROSS PAKISTAN',
   '✦ 100% WATERPROOF JEWELRY',
   '✦ FLEXIBLE PAYMENT OPTIONS',
   '✦ TARNISH-PROOF GUARANTEE',

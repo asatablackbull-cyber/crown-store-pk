@@ -240,7 +240,7 @@ export default function HomePage() {
         </h2>
         <p className="section-subtitle" style={{ marginBottom: '2.5rem' }}>
           Thousands of individuals across Pakistan trust Crown Store PK for timeless,
-          high-end jewelry at affordable prices. Free shipping. Flexible payment options.
+          high-end jewelry at affordable prices. Nationwide delivery. Flexible payment options.
         </p>
         <Link href="/shop" className="btn btn-primary btn-lg">
           Shop Now →

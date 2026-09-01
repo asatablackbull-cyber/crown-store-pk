@@ -73,8 +73,8 @@ export default function AboutPage() {
         <div className="features-grid">
           <Reveal as="div" className="feature-card">
             <div className="feature-icon"><IconTruck /></div>
-            <h3 className="feature-title">Free Shipping</h3>
-            <p className="feature-text">Free delivery on all orders across Pakistan. No minimum order required.</p>
+            <h3 className="feature-title">Nationwide Delivery</h3>
+            <p className="feature-text">We deliver across Pakistan — shipping charges (if any) are shown clearly at checkout.</p>
           </Reveal>
           <Reveal as="div" className="feature-card" delay={80}>
             <div className="feature-icon"><IconCreditCard /></div>

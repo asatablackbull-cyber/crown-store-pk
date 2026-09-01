@@ -168,7 +168,7 @@ export default function ProductDetailContent({ product }) {
           </div>
           <div className="product-feature">
             <span className="product-feature-icon"><IconPackage width="20" height="20" /></span>
-            <span>Free Shipping</span>
+            <span>Nationwide Delivery</span>
           </div>
           <div className="product-feature">
             <span className="product-feature-icon"><IconCreditCard width="20" height="20" /></span>

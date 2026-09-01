@@ -1,10 +1,19 @@
 'use client';
+import { useState, useEffect } from 'react';
 import { useCart } from '../components/CartContext';
 import { IconBag, IconCreditCard } from '../components/Icons';
 import Link from 'next/link';
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, totalPrice } = useCart();
+  const [shippingCharge, setShippingCharge] = useState(0);
+
+  useEffect(() => {
+    fetch('/api/settings', { cache: 'no-store' })
+      .then(r => r.json())
+      .then(data => setShippingCharge(parseFloat(data.shippingCharge) || 0))
+      .catch(() => {});
+  }, []);
 
   return (
     <>
@@ -49,8 +58,13 @@ export default function CartPage() {
             <div className="order-summary">
               <h3>Order Summary</h3>
               <div className="summary-item"><span>Subtotal</span><span>Rs. {totalPrice.toLocaleString()}</span></div>
-              <div className="summary-item"><span>Shipping</span><span style={{ color: 'var(--color-success)' }}>FREE</span></div>
-              <div className="summary-total"><span>Total</span><span className="amount">Rs. {totalPrice.toLocaleString()}</span></div>
+              <div className="summary-item">
+                <span>Shipping</span>
+                <span style={{ color: shippingCharge > 0 ? 'var(--color-text)' : 'var(--color-success)' }}>
+                  {shippingCharge > 0 ? `Rs. ${shippingCharge.toLocaleString()}` : 'FREE'}
+                </span>
+              </div>
+              <div className="summary-total"><span>Total</span><span className="amount">Rs. {(totalPrice + shippingCharge).toLocaleString()}</span></div>
               <Link href="/checkout" className="btn btn-primary btn-block" style={{ marginTop: '1.5rem' }}>Proceed to Checkout</Link>
               <div className="cod-badge" style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><IconCreditCard width="18" height="18" /> Multiple Payment Options Available</div>
             </div>
