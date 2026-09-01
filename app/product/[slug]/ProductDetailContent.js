@@ -1,7 +1,7 @@
 'use client';
 import { useState, useRef } from 'react';
 import { useCart } from '../../components/CartContext';
-import { IconDroplet, IconShield, IconPackage, IconCreditCard, IconGear, IconSparkles, IconStar, IconCheck } from '../../components/Icons';
+import { IconDroplet, IconShield, IconPackage, IconCreditCard, IconGear, IconSparkles, IconStar, IconCheck, IconChevronDown } from '../../components/Icons';
 import { getProductReviews, getAverageRating } from '../../data/reviews';
 import Reveal from '../../components/Reveal';
 import Link from 'next/link';
@@ -52,7 +52,21 @@ export default function ProductDetailContent({ product }) {
           onTouchStart={images.length > 1 ? handleTouchStart : undefined}
           onTouchEnd={images.length > 1 ? handleTouchEnd : undefined}
         >
-          <img src={images[selectedImage] || images[0]} alt={product.name} />
+          <div className="product-main-image-track" style={{ transform: `translateX(-${selectedImage * 100}%)` }}>
+            {images.map((img, i) => (
+              <img key={img + i} src={img} alt={product.name} />
+            ))}
+          </div>
+          {images.length > 1 && (
+            <>
+              <button type="button" className="product-image-nav prev" onClick={() => showImage(selectedImage - 1)} aria-label="Previous image">
+                <IconChevronDown width="18" height="18" style={{ transform: 'rotate(90deg)' }} />
+              </button>
+              <button type="button" className="product-image-nav next" onClick={() => showImage(selectedImage + 1)} aria-label="Next image">
+                <IconChevronDown width="18" height="18" style={{ transform: 'rotate(-90deg)' }} />
+              </button>
+            </>
+          )}
         </div>
         {images.length > 1 && (
           <div className="product-thumbnails">

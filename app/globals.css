@@ -462,8 +462,12 @@ img {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--transition), transform 0.15s ease;
   text-decoration: none;
+}
+
+.btn:active {
+  transform: scale(0.97);
 }
 
 .btn-primary {
@@ -1432,6 +1436,7 @@ img {
 }
 
 .product-main-image {
+  position: relative;
   width: 100%;
   aspect-ratio: 1;
   overflow: hidden;
@@ -1441,15 +1446,56 @@ img {
   touch-action: pan-y;
 }
 
-.product-main-image img {
+.product-main-image-track {
+  display: flex;
   width: 100%;
   height: 100%;
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.product-main-image-track img {
+  width: 100%;
+  height: 100%;
+  flex-shrink: 0;
   object-fit: cover;
   transition: transform 0.4s ease;
 }
 
-.product-main-image:hover img {
+.product-main-image:hover .product-main-image-track img {
   transform: scale(1.05);
+}
+
+.product-image-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(var(--color-bg-rgb), 0.75);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  z-index: 2;
+}
+
+.product-image-nav:hover {
+  background: var(--color-gold);
+  color: var(--color-on-accent);
+  border-color: var(--color-gold);
+}
+
+.product-image-nav.prev {
+  left: 12px;
+}
+
+.product-image-nav.next {
+  right: 12px;
 }
 
 .product-thumbnails {
@@ -1585,15 +1631,15 @@ img {
 }
 
 .size-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: 0.6rem;
 }
 
 .size-btn {
   position: relative;
-  min-width: 44px;
-  height: 44px;
+  width: 100%;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1605,7 +1651,7 @@ img {
   font-weight: 500;
   cursor: pointer;
   transition: var(--transition);
-  padding: 0 0.75rem;
+  padding: 0 0.5rem;
   overflow: hidden;
 }
 
@@ -1738,6 +1784,15 @@ img {
   font-size: 0.88rem;
   color: var(--color-text-muted);
   transition: var(--transition);
+}
+
+.payment-method-instructions {
+  animation: fade-in-up 0.3s ease;
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .payment-method-option.active {

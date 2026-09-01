@@ -286,7 +286,7 @@ export default function CheckoutPage() {
                     {m.name}
                     {m.extraFee > 0 && <span style={{ color: 'var(--color-text-dim)' }}> (+ Rs. {Number(m.extraFee).toLocaleString()} handling)</span>}
                     {selectedMethodId === m.id && m.instructions && (
-                      <p style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', marginTop: '0.75rem', whiteSpace: 'pre-wrap', width: '100%' }}>
+                      <p className="payment-method-instructions" style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', marginTop: '0.75rem', whiteSpace: 'pre-wrap', width: '100%' }}>
                         {m.instructions}
                       </p>
                     )}
